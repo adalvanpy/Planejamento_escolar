@@ -15,50 +15,70 @@ $result = $conexao->query($sql);
 
 
 if ($result->num_rows > 0) {
-    echo "<h2>Meus Planejamentos:</h2>";
+    echo "<div class='flex items-center justify-center p-4 '>";
+    echo "<h2 class='bg-blue-400 p-2 w-[20%] rounded text-white font-bold'>Meus Planejamentos:</h2>";
+    echo "</div>";
     while($row = $result->fetch_assoc()) {
         echo "<div class='planejamento flex flex-col items-center justify-center'>";
         echo "<p class='hidden'><strong>ID:</strong>" . htmlspecialchars($row["ID"]) . "</p>";
 
-        echo "<div class='flex items-center justify-center w-[70%]'>";
-        echo "<p class='w-[70%] border p-2 text-start'><strong>DATA:</strong> " . htmlspecialchars($row['DATA']) . "</p>";
-        echo "<p class='w-[30%] border p-2 text-start'><strong>TURMA:</strong> " . htmlspecialchars($row['TURMA']) . "</p>";
+        echo "<div class='flex items-center justify-center w-[50%]'>";
+        echo "<p class='w-[60%] border p-2 text-start'><strong>DATA:</strong> " . htmlspecialchars($row['DATA']) . "</p>";
+        echo "<p class='w-[40%] border p-2 text-start'><strong>TURMA:</strong> " . htmlspecialchars($row['TURMA']) . "</p>";
         echo "</div>";
 
-        echo "<div class='flex items-center justify-center w-[70%]'>";
-        echo "<p class='w-[80%] border p-2 text-start'><strong>COMPONENTE CURRICULAR:</strong> " . htmlspecialchars($row['COMP_CURRICULAR']) . "</p>";
-        echo "<p class='w-[20%] border p-2 text-start'><strong>UNIDADE:</strong> " . htmlspecialchars($row['UNIDADE']) . "</p>";
+        echo "<div class='flex items-center justify-center w-[50%]'>";
+        echo "<p class='w-[70%] border p-2 text-start'><strong>COMPONENTE CURRICULAR:</strong> " . htmlspecialchars($row['COMP_CURRICULAR']) . "</p>";
+        echo "<p class='w-[30%] border p-2 text-start'><strong>UNIDADE:</strong> " . htmlspecialchars($row['UNIDADE']) . "</p>";
         echo "</div>";
 
-        echo "<div class='w-[70%]'>";
+        echo "<div class='w-[50%]'>";
         echo "<p class='w-full border p-2 text-start'><strong>UNIDADE TEMÁTICA:</strong> " . htmlspecialchars($row['UN_TEMATICA']) . "</p>";
         echo "</div>";
 
-        echo "<div class='flex flex-col items-center justify-center w-[70%]'>";
+        echo "<div class='flex flex-col items-center justify-center w-[50%]'>";
+        $obj = explode(";", $row['OBJETIVOS']);
         echo "<p class='w-full border p-2 text-center'> <strong>OBJETIVOS EDUCATIVOS ESPECÍFICOS:</strong></p>";
-        echo "<p class='w-full border p-2 text-start'>" . htmlspecialchars($row['OBJETIVOS']) . "</p>";
+        echo "<ul class='w-full border'>";
+        foreach($obj as $objt) {
+            echo "<li <p class='w-full  p-2 text-start'>" . htmlspecialchars(trim($objt)) . "</li>";
+        }
+        echo "</ul>";
         echo "</div>";
 
-        echo "<div class='flex flex-col items-center justify-center w-[70%]'>";
+        echo "<div class='flex flex-col items-center justify-center w-[50%]'>";
+        $perc = explode(";", $row['PERCURSO']);
         echo "<p class='w-full border p-2 text-center'><strong>PERCURSO:</strong></p>";
-        echo "<p class='w-full border p-2 text-start'>" . htmlspecialchars($row['PERCURSO']) . "</p>";
+        echo "<ul class='w-full border'>";
+        foreach($perc as $perc) {
+            echo "<li class='w-full  p-2 text-start'>" . htmlspecialchars(trim($perc)) . "</li>";
+        }
+        echo "</ul>";
         echo "</div>";
 
-        echo "<div class='flex w-[70%] items-stretch'>";
+        echo "<div class='flex w-[50%] items-stretch border'>";
         echo "<div class='flex flex-col items-center justify-center w-[50%] h-full'>";
+        $rec  = explode(";", $row['RECURSOS']);
         echo "<p class='w-full border p-2 text-start'><strong>RECURSOS:</strong></p>";
-        echo "<p class='w-full border p-2 text-start'>" . htmlspecialchars($row['RECURSOS']) . "</p>";
+        echo "<ul class='w-full border'>";
+        foreach($rec as $rec) {
+            echo "<li class='w-full  p-2 text-start'>" . htmlspecialchars(trim($rec)) . "</li>";
+        }
+        echo "</ul>";
         echo "</div>";
         echo "<div class='flex flex-col items-center justify-center w-[50%] h-full'>";
+        $ava  = explode(";", $row['AVALIACAO']);
         echo "<p class='w-full border p-2 text-start'><strong>AVALIAÇÃO:</strong></p>";
-        echo "<p class='w-full border p-2 text-start'>". htmlspecialchars($row['AVALIACAO']) . "</p>";
+        echo "<ul class='w-full'>";
+        foreach($ava as $ava) {
+            echo "<li class='w-full  p-2 text-start'>" . htmlspecialchars(trim($ava)) . "</li>";
+        }
         echo "</div>";
         echo "<hr>";
         echo "</div>";
-        echo "<a class='border bg-blue-400 rounded p-2 w-[10%] m-2' href='delete.php?id=" . $row['ID'] . "'>Delete</a>";
+        echo "<a class='border bg-blue-400 rounded p-2 w-[10%] m-2 font-bold text-white' href='delete.php?ID=" . $row['ID'] . "'>Delete</a>";
     }
-} else {
-    echo "<p>Nenhum planejamento encontrado.</p>";
+
 }
 ?>
 </body>
