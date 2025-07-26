@@ -9,5 +9,5 @@ include("conexao.php");
  $dompdf->loadHtml($html);
  $dompdf->setPaper('A4', 'portrait');
  $dompdf->render();
- $dompdf->stream('planejamento_escolar.pdf', ["Attachment" => true]);
+ $dompdf->stream('planejamento.pdf', ["Attachment" => true]);
 ?>

@@ -78,13 +78,17 @@ $conexao->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex flex-col items-center min-h-screen p-6">
-<header class="flex items-center justify-end h-20 p-2 border w-full bg-white">
-    <li class=" text-blue-500 inline-block text-2xl p-2"><a href="criar_planejamento.php">Criar Planejamento</a></li>
-    <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
-    <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+<header class="flex items-center justify-between h-20 p-2 border w-full bg-white">
+    <div>
+        <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
+    </div>
+    <div>
+        <li class=" text-blue-500 inline-block text-2xl p-2"><a href="exibir_planejamento.php">Voltar</a></li>
+        <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+    </div>
 </header>
 <main class="w-full flex flex-col items-center justify-center">
-<h1 class="text-3xl font-bold mb-6 mt-4">Editar Planejamento</h1>
+<h1 class="text-2xl font-bold bg-blue-300 p-2 text-white rounded mb-6 mt-4">Editar Planejamento</h1>
 <form  method="post" class="bg-white p-8 rounded shadow-md w-[50%] space-y-4">
     <div class="flex items-center justify-between w-full gap-4">
         <div class=" w-full">

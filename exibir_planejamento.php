@@ -21,10 +21,14 @@ $result = $conexao->query($sql);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body class="bg-gray-100 flex flex-col items-center w-full p-6">
-<header class="flex items-center justify-end h-20 p-2 border w-full bg-white">
-    <li class=" text-blue-500 inline-block text-2xl p-2"><a href="criar_planejamento.php">Criar Planejamento</a></li>
-    <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
-    <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+<header class="flex items-center justify-between h-20 p-2 border w-full bg-white">
+    <div>
+        <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
+    </div>
+    <div>
+        <li class=" text-blue-500 inline-block text-2xl p-2"><a href="criar_planejamento.php">Criar Planejamento</a></li>
+        <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+    </div>
 </header>
 <main class="w-full flex flex-col items-center justify-center">
 <?php if ($result->num_rows > 0) { ?>
