@@ -1,5 +1,13 @@
 <?php
+session_start();
 include 'conexao.php';
+if (isset($_SESSION['usuario'])) {
+    $usuario = $_SESSION['usuario'];
+} else {
+    header("Location: login.php");
+    exit();
+}
+$id_usuario = $usuario['ID'];
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $data = $_POST['data'];
@@ -12,9 +20,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $recursos = $_POST['recursos'];
     $avaliacao = $_POST['avaliacao'];
 
-    $sql = "INSERT INTO Planejamento(DATA, COMP_CURRICULAR, UN_TEMATICA, TURMA, UNIDADE, OBJETIVOS, PERCURSO, RECURSOS, AVALIACAO) VALUES (?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO Planejamento(DATA, COMP_CURRICULAR, UN_TEMATICA, TURMA, UNIDADE, OBJETIVOS, PERCURSO, RECURSOS, AVALIACAO,ID_USUARIO) VALUES (?,?,?,?,?,?,?,?,?,?)";
     $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("sssssssss", $data, $comp_curricular, $un_tematica, $turma, $unidade, $objetivos, $percurso, $recursos, $avaliacao);
+    $stmt->bind_param("sssssssssi", $data, $comp_curricular, $un_tematica, $turma, $unidade, $objetivos, $percurso, $recursos, $avaliacao,$id_usuario);
 
     if($stmt->execute()){
         echo "Planejamento criado com sucesso!";
@@ -42,7 +50,13 @@ $conexao->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex flex-col items-center min-h-screen p-6">
-<h1 class="text-3xl font-bold mb-6">Criar Planejamento</h1>
+<header class="flex items-center justify-end h-20 p-2 border w-full bg-white">
+    <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
+    <a href="exibir_planejamento.php" class="text-2xl text-blue-500 p-2">Meus planejamentos</a>
+    <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+</header>
+<main class="w-full flex flex-col items-center justify-center">
+<p class="text-2xl font-bold text-white p-2 rounded mb-6 mt-4 bg-blue-300">Criar Planejamento</p>
 <form action="criar_planejamento.php" method="post" class="bg-white p-8 rounded shadow-md w-[50%] space-y-4">
     <div class="flex items-center justify-between w-full gap-4">
         <div class=" w-full">
@@ -161,5 +175,6 @@ $conexao->close();
             if (url) document.execCommand('createLink', false, url);
         }
     </script>
+</main>
 </body>
 </html>

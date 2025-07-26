@@ -1,11 +1,30 @@
 <?php
+session_start();
 include("conexao.php");
+if(isset($_SESSION['usuario'])){
+    $usuario = $_SESSION['usuario'];
+}
+else {
+    header("Location: login.php");
+    exit();
+}
 
-if (isset($_GET['ID'])) {
-    $id = $_GET['ID'];
-    $query = "SELECT * FROM Planejamento where ID = $id";
-    $resultado = mysqli_query($conexao, $query);
-    $row = mysqli_fetch_assoc($resultado);
+if (isset($_GET['ID'])){
+    $id = $_GET['ID'] ?? null;
+
+    if (!$id) {
+        die("ID não informado.");
+    }
+
+    $stmt = $conexao->prepare("SELECT * FROM Planejamento WHERE ID_PLANEJAMENTO = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    if (!$row) {
+        die("Planejamento não encontrado.");
+    }
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $data = $_POST['data']??"";
         $comp_curricular = $_POST['comp_curricular']??"";
@@ -26,7 +45,7 @@ if (isset($_GET['ID'])) {
         PERCURSO=?,
         RECURSOS=?,
         AVALIACAO=?
-         WHERE ID=?";
+         WHERE ID_PLANEJAMENTO=?";
         $stmt = $conexao->prepare($sql);
         $stmt->bind_param("sssssssssi",
             $data,
@@ -59,12 +78,18 @@ $conexao->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex flex-col items-center min-h-screen p-6">
-<h1 class="text-3xl font-bold mb-6">Criar Planejamento</h1>
+<header class="flex items-center justify-end h-20 p-2 border w-full bg-white">
+    <li class=" text-blue-500 inline-block text-2xl p-2"><a href="criar_planejamento.php">Criar Planejamento</a></li>
+    <p class="text-2xl text-center text-white  p-2 bg-blue-300 rounded-full w-12 h-12"><?= substr($usuario['NOME'], 0, 1) ?></p>
+    <a href="logout.php" class="text-2xl text-blue-500 p-2">Sair</a>
+</header>
+<main class="w-full flex flex-col items-center justify-center">
+<h1 class="text-3xl font-bold mb-6 mt-4">Editar Planejamento</h1>
 <form  method="post" class="bg-white p-8 rounded shadow-md w-[50%] space-y-4">
     <div class="flex items-center justify-between w-full gap-4">
         <div class=" w-full">
             <label for="data" class="block text-left font-semibold mb-1">DATA</label>
-            <input type="text" name="data" id="data" value="<?= $row['DATA'] ?>"" required
+            <input type="text" name="data" id="data" value="<?= $row['DATA'] ?>" required
                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
         </div>
         <div  class=" w-full">
@@ -169,6 +194,7 @@ $conexao->close();
         Atualizar Planejamento
     </button>
 </form>
+</main>
 <script>
     document.querySelector("form").addEventListener("submit", function () {
         document.getElementById("objetivos").value = document.getElementById("objetivos_").innerHTML;
